@@ -49,27 +49,23 @@ class Register : AppCompatActivity() {
 
     // 회원가입 API 호출
     private fun register(user: User) {
-        val call = apiService.register(user)
-        call.enqueue(object : Callback<User> {
-            override fun onResponse(
-                call: Call<User>,
-                response: Response<User>
-            ) {
+        val call = apiService.insertMember(user)
+        call.enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
                 if (response.isSuccessful) {
                     // 회원가입 성공 처리
                     showDialog("회원가입 성공")
                 } else {
                     // 회원가입 실패 처리
-                    val errorMessage = response.errorBody()?.string() ?: "회원가입 실패"
+                    val errorMessage = response.body() ?: "회원가입 실패"
                     showDialog(errorMessage)
                 }
             }
 
-            override fun onFailure(call: Call<User>, t: Throwable) {
+            override fun onFailure(call: Call<String>, t: Throwable) {
                 // 통신 실패 처리
                 showDialog("통신 실패")
             }
-
         })
     }
 
@@ -78,7 +74,7 @@ class Register : AppCompatActivity() {
     private fun showDialog(message: String) {
         val dialogBuilder = AlertDialog.Builder(this)
 
-        val intent = Intent(this, Login::class.java)
+        //val intent = Intent(this, Login::class.java)
 
         dialogBuilder.setTitle("회원가입 결과")
         dialogBuilder.setMessage(message)
@@ -88,7 +84,7 @@ class Register : AppCompatActivity() {
                 DialogInterface.BUTTON_POSITIVE -> {
                     Log.d(TAG, "확인 버튼 클릭")
                     if (message == "회원가입 성공") {
-                        startActivity(intent)
+                       // startActivity(intent)
                         finish()
                     }
                 }
