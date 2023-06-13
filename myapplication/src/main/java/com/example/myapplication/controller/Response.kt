@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.controller
 
 data class LoginResponse(val status: String, val message: String)
 

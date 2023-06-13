@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.controller
 
 data class LoginRequest(val id: String, val pw: String)
 

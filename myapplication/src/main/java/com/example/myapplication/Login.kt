@@ -6,6 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
+import com.example.myapplication.controller.ApiService
+import com.example.myapplication.controller.Member
+import com.example.myapplication.controller.RetrofitBuilder
 import com.example.myapplication.databinding.ActivityLoginBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -22,12 +25,11 @@ class Login : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        apiService = RetrofitBuilder.getApiService()
+        apiService = RetrofitBuilder.createApiService()
 
         binding.btnLogin.setOnClickListener {
             val id = binding.editId.text.toString()
             val pw = binding.editPw.text.toString()
-            val intent = Intent(this@Login, MainActivity::class.java)
 
             // 유저가 항목을 다 채우지 않았을 경우
             if (id.isEmpty() || pw.isEmpty()) {
@@ -36,7 +38,7 @@ class Login : AppCompatActivity() {
             }
 
             // 로그인 API 호출
-            login(id, pw, intent)
+            login(id, pw)
         }
 
         binding.btnRegister.setOnClickListener {
@@ -46,32 +48,37 @@ class Login : AppCompatActivity() {
     }
 
     // 로그인 API 호출
-    private fun login(id: String, pw: String, intent: Intent) {
-        val call = apiService.login(id, pw)
-        call.enqueue(object : Callback<LoginResponse> {
-            override fun onResponse(
-                call: Call<LoginResponse>,
-                response: Response<LoginResponse>
-            ) {
+    private fun login(id : String, pw:String) {
+        val member = Member(id, pw)
+        val call = apiService.login(member)
+        Log.d(TAG, "로그인 요청 - ID: $id, PW: $pw")
+        call.enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                Log.d(TAG, "로그인 응답 받음")
                 if (response.isSuccessful) {
                     val loginResponse = response.body()
-                    if (loginResponse?.status == "success") {
+                    if (loginResponse == "Login successful") {
                         // 로그인 성공 처리
+                        Log.d(TAG, "로그인 성공")
                         showDialog("success")
+                        val intent = Intent(this@Login, MainActivity::class.java)
                         startActivity(intent)
                         finish()
                     } else {
                         // 로그인 실패 처리
+                        Log.d(TAG, "로그인 실패")
                         showDialog("fail")
                     }
                 } else {
                     // API 요청 실패 처리
+                    Log.d(TAG, "API 요청 실패")
                     showDialog("fail")
                 }
             }
 
-            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+            override fun onFailure(call: Call<String>, t: Throwable) {
                 // 통신 실패 처리
+                Log.d(TAG, "통신 실패")
                 showDialog("fail")
             }
         })
