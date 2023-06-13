@@ -1,5 +1,5 @@
 package com.example.myapplication
 
-data class LoginRequest(val username: String, val password: String)
+data class LoginRequest(val id: String, val pw: String)
 
-data class RegisterRequest(val username: String, val password: String)
+data class RegisterRequest(val id: String, val pw: String)
