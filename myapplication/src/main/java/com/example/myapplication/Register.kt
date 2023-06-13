@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import android.content.DialogInterface
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -26,17 +27,6 @@ class Register : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-//        val gson = GsonBuilder()
-//            .setLenient()
-//            .create()
-//
-//        val retrofit = Retrofit.Builder()
-//            .baseUrl("http://10.100.105.201:9080/")
-//            .addConverterFactory(GsonConverterFactory.create(gson))
-//            .build()
-//
-//        apiService = retrofit.create(ApiService::class.java)
 
         apiService = RetrofitBuilder.createApiService()
 
@@ -109,6 +99,8 @@ class Register : AppCompatActivity() {
                 DialogInterface.BUTTON_POSITIVE -> {
                     Log.d(TAG, "확인 버튼 클릭")
                     if (message == "회원가입 성공") {
+                        val intent = Intent(this, Login::class.java)
+                        startActivity(intent)
                         finish()
                     }
                 }

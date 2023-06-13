@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import com.example.myapplication.controller.ApiService
+import com.example.myapplication.controller.LoginResponse
 import com.example.myapplication.controller.Member
 import com.example.myapplication.controller.RetrofitBuilder
 import com.example.myapplication.databinding.ActivityLoginBinding
@@ -48,16 +49,16 @@ class Login : AppCompatActivity() {
     }
 
     // 로그인 API 호출
-    private fun login(id : String, pw:String) {
-        val member = Member(id, pw)
+    // 로그인 API 호출
+    private fun login(id: String, pw: String, nickname: String) {
+        val member = Member(id, pw, nickname)
         val call = apiService.login(member)
         Log.d(TAG, "로그인 요청 - ID: $id, PW: $pw")
-        call.enqueue(object : Callback<String> {
-            override fun onResponse(call: Call<String>, response: Response<String>) {
-                Log.d(TAG, "로그인 응답 받음")
+        call.enqueue(object : Callback<LoginResponse> {
+            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 if (response.isSuccessful) {
                     val loginResponse = response.body()
-                    if (loginResponse == "Login successful") {
+                    if (loginResponse?.message == "Login successful") {
                         // 로그인 성공 처리
                         Log.d(TAG, "로그인 성공")
                         showDialog("success")
@@ -76,10 +77,10 @@ class Login : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<String>, t: Throwable) {
+            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                 // 통신 실패 처리
-                Log.d(TAG, "통신 실패")
                 showDialog("fail")
+                Log.e(TAG, "통신 실패: ${t.message}")
             }
         })
     }

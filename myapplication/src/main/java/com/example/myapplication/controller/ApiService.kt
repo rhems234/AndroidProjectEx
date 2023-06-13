@@ -29,8 +29,12 @@ interface ApiService  {
 
     @GET("/test/deleteMember")
     fun deleteMember(@Query("id") id: String): Call<String>
+
     @POST("test/login")
-    fun login(@Body member: Member): Call<String>
+    fun login(
+        @Body member: Member
+    ): Call<LoginResponse>
+
 
 
 }
