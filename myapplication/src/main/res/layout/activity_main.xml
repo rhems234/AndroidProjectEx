@@ -1,35 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:contentInsetStart="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:background="@color/orange"
+        app:title="식사톡톡"
+        app:titleTextColor="@android:color/white" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp">
+    <LinearLayout
+        android:id="@+id/home_ly"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="1">
+    </LinearLayout>
 
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/search_bar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="검색어를 입력하시오."
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.appcompat.widget.Toolbar>
+    <ImageButton
+        android:id="@+id/plus"
+        android:layout_gravity="right"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:layout_margin="15dp"
+        android:src="@drawable/plus"
+        android:backgroundTint="@color/white"
+        android:scaleType="fitCenter"
+        android:background="@color/darkorange" />
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        app:menu="@menu/btm_navi_menu"
+        app:itemBackground="@android:color/holo_orange_dark"
+        app:itemIconTint="@color/tab_selection_color"
+        app:itemTextColor="@color/tab_selection_color" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
