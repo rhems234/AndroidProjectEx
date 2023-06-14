@@ -49,9 +49,8 @@ class Login : AppCompatActivity() {
     }
 
     // 로그인 API 호출
-    // 로그인 API 호출
-    private fun login(id: String, pw: String, nickname: String) {
-        val member = Member(id, pw, nickname)
+    private fun login(id: String, pw: String) {
+        val member = Member(id, pw)
         val call = apiService.login(member)
         Log.d(TAG, "로그인 요청 - ID: $id, PW: $pw")
         call.enqueue(object : Callback<LoginResponse> {
@@ -62,6 +61,8 @@ class Login : AppCompatActivity() {
                         // 로그인 성공 처리
                         Log.d(TAG, "로그인 성공")
                         showDialog("success")
+                        // 세션 ID 저장
+                        SharedPreferencesUtil.saveSessionId(this@Login, loginResponse.sessionId)
                         val intent = Intent(this@Login, MainActivity::class.java)
                         startActivity(intent)
                         finish()
@@ -75,6 +76,8 @@ class Login : AppCompatActivity() {
                     Log.d(TAG, "API 요청 실패")
                     showDialog("fail")
                 }
+                Log.d(TAG, "통신 성공 - HTTP 상태 코드: ${response.code()}")
+                Log.d(TAG, "통신 성공 - 응답 메시지: ${response.body()?.toString()}")
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
@@ -107,5 +110,6 @@ class Login : AppCompatActivity() {
 
         dialogBuilder.setPositiveButton("확인", dialogListener)
         dialogBuilder.show()
+        finish()
     }
 }

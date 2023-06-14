@@ -12,5 +12,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val sessionId = SharedPreferencesUtil.getSessionId(this)
     }
 }
